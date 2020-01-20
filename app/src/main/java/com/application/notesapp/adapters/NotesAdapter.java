@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.application.notesapp.R;
+import com.application.notesapp.callbacks.NoteEventListener;
 import com.application.notesapp.model.Note;
 import com.application.notesapp.utils.NoteUtils;
 
@@ -18,8 +19,12 @@ import java.util.ArrayList;
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteHolder>{
 public Context context;
     private ArrayList <Note> notes;
+private NoteEventListener listener;
 
-    public NotesAdapter(ArrayList<Note> notes) {
+
+
+    public NotesAdapter(Context context, ArrayList<Note> notes) {
+        this.context = context;
         this.notes = notes;
     }
 
@@ -27,7 +32,7 @@ public Context context;
     @Override
     public NoteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(context).inflate(R.layout.note_layout, parent ,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_layout, parent ,false);
 
 
         return new NoteHolder(v);
@@ -35,16 +40,36 @@ public Context context;
 
     @Override
     public void onBindViewHolder(  NoteHolder holder, int position) {
-Note note = getNote(position);
-if (note!=null ){
+final Note note = getNote(position);
+if (note!=null ) {
     holder.note_text.setText(note.getNote_text());
     holder.note_date.setText(NoteUtils.dateFromLong(note.getNote_date()));
+
+    holder.itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            listener.onNoteClick(note);
+        }
+    });
+
+    holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            listener.onNoteClick(note);
+            return false;
+        }
+    });
+
+
+
 }
+
     }
 @Override
     public int getItemCount() {
         return notes.size();
     }
+
     public   Note getNote(int position){
         return notes.get(position);
     }
@@ -61,4 +86,7 @@ public NoteHolder(@NonNull View itemView) {
         }
     }
 
+    public void setListener(NoteEventListener listener) {
+        this.listener = listener;
+    }
 }

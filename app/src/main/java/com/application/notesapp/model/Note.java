@@ -1,9 +1,21 @@
 package com.application.notesapp.model;
 
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "notes")
 public class Note {
+    @PrimaryKey(autoGenerate = true)
+    private int id = -1; //default
+    @ColumnInfo(name = "text")
     private String note_text;
+    @ColumnInfo(name = "date")
     private long note_date;
 
+    public Note() {
+    }
 
     public Note(String note_text, long note_date){
         this.note_text=note_text;
@@ -24,5 +36,20 @@ public class Note {
     }
 
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "id=" + id +
+                ", note_date=" + note_date +
+                '}';
+    }
 }
+
