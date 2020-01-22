@@ -27,7 +27,7 @@ public Context context;
     @Override
     public NoteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(context).inflate(R.layout.note_layout, parent ,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_layout, parent ,false);
 
 
         return new NoteHolder(v);
